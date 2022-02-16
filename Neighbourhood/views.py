@@ -144,6 +144,7 @@ def Settings(request, username):
 @login_required(login_url='Login')
 def EditProfile(request, username):
     user = User.objects.get(username=username)
+    profile_details = Profile.objects.get(user = user.id)
     if request.method == 'POST':
         user_form = UpdateUserForm(request.POST, instance=request.user)
         profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
@@ -160,4 +161,10 @@ def EditProfile(request, username):
         user_form = UpdateUserForm(instance=request.user)
         profile_form = UpdateProfileForm(instance=request.user.profile)
 
-    return render(request, 'Edit Profile.html', {'user_form': user_form, 'profile_form': profile_form})
+    return render(request, 'Edit Profile.html', {'user_form': user_form, 'profile_form': profile_form, 'profile_details':profile_details})
+
+@login_required(login_url='Login')
+def MyProfile(request, username):
+    profile = User.objects.get(username=username)
+    profile_details = Profile.objects.get(user = profile.id)
+    return render(request, 'My Profile.html', {'profile':profile, 'profile_details':profile_details})

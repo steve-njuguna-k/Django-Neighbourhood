@@ -25,7 +25,7 @@
             <nav aria-label="breadcrumb" class="main-breadcrumb">
                 <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">{{ profile_details.user.first_name }} {{ profile_details.user.last_name }}</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Settings</li>
                 </ol>
             </nav>
@@ -84,7 +84,7 @@
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-bottom: 10px;">Save Changes</button>
-                                    <a href="#">
+                                    <a href="{% url 'MyProfile' user.username %}" name="MyProfile">
                                         <button type="button" class="btn btn-dark btn-lg btn-block" style="background-color: #000000!important;">Cancel</button>
                                     </a>
                                 </form>

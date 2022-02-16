@@ -15,7 +15,7 @@
                     <form action="#" method="POST" class="form-inline my-2 my-lg-0 searchbar">
                         <div class="bg-light rounded searchbar">
                             <div class="input-group searchbar">
-                                <input type="search" name="search" placeholder="Search For Neighbourhoods & Businesses" class="form-control border-0 bg-light searchbar-nv" style="width: 415px;">
+                                <input type="search" name="search" placeholder="Search For Posts, Neighbourhoods & Businesses" class="form-control border-0 bg-light searchbar-nv" style="width: 415px;">
                                 <div class="input-group-append searchbar">
                                   <button type="submit" class="btn btn-link searchbar"><i class="fa-solid fa-magnifying-glass"></i></button>
                                 </div>
@@ -39,7 +39,7 @@
                                 </div>
                             </button> 
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#" name="MyProfile"><i class="fa-solid fa-user-large"></i> My Profile</a>
+                                <a class="dropdown-item" href="{% url 'MyProfile' user.username %}" name="MyProfile"><i class="fa-solid fa-user-large"></i> My Profile</a>
                                 <a class="dropdown-item" href="#" name="MyPortfolio"><i class="fa-solid fa-briefcase"></i> Businesses</a>
                                 <a class="dropdown-item" href="#" name="MyPortfolio"><i class="fa-solid fa-location-pin"></i> Neighbourhoods</a>
                                 <a class="dropdown-item" href="{% url 'EditProfile' user.username %}" name="EditProfile"><i class="fa-solid fa-edit"></i> Edit Profile</a>
