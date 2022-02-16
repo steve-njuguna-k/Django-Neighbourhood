@@ -9,6 +9,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
+from django.contrib.auth import update_session_auth_hash
+from .forms import PasswordChangeForm
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from Core import settings
@@ -118,3 +120,20 @@ def Logout(request):
 
 def Home(request):
     return render(request, 'Index.html')
+
+@login_required(login_url='Login')
+def Settings(request, username):
+    username = User.objects.get(username=username)
+    if request.method == "POST":
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, '✅ Your Password Has Been Updated Successfully!')
+            return redirect("Settings", username=username)
+        else:
+            messages.error(request, "⚠️ Your Password Wasn't Updated!")
+            return redirect("Settings", username=username)
+    else:
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        return render(request, "Settings.html", {'form': form})

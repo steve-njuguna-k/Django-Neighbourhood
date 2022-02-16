@@ -43,7 +43,7 @@
                                 <a class="dropdown-item" href="#" name="MyPortfolio"><i class="fa-solid fa-briefcase"></i> Businesses</a>
                                 <a class="dropdown-item" href="#" name="MyPortfolio"><i class="fa-solid fa-location-pin"></i> Neighbourhoods</a>
                                 <a class="dropdown-item" href="#" name="EditProfile"><i class="fa-solid fa-edit"></i> Edit Profile</a>
-                                <a class="dropdown-item" href="#" name="Settings"><i class="fa-solid fa-cog"></i> Settings</a>
+                                <a class="dropdown-item" href="{% url 'Settings' user.username %}" name="Settings"><i class="fa-solid fa-cog"></i> Settings</a>
                                 <a class="dropdown-item" href="{% url 'Logout' %}" name="Logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
                             </div>
                         </div>

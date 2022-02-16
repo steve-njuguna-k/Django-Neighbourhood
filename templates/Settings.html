@@ -1,0 +1,110 @@
+{% extends "Base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="menu-container">
+        {% include 'Navbar.html' %}
+    </div>
+
+    <div class="container" style="margin-top: 30px;">
+        <center>
+            {% if messages %}
+                {% for message in messages %} 
+                <div class="alert {{message.tags}} m-1" role="alert" style="font-size: medium; margin-bottom: 30px;">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %} 
+            {% endif %}
+        </center>
+        <div class="main-body">
+        
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="main-breadcrumb">
+                <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Settings</li>
+                </ol>
+            </nav>
+            <!-- /Breadcrumb -->
+        
+                <div class="row gutters-sm">
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-column align-items-center text-center">
+                                    {% if profile_details.profile_image %}
+                                        <img src="{{ profile_details.profile_image.url }}" alt="Admin" class="rounded-circle" width="160">
+                                    {% else %}
+                                        <img class="rounded-circle" src="https://www.pngall.com/wp-content/uploads/5/Profile-PNG-File.png" alt="" height="160" width="160">
+                                    {% endif %}
+                                    <div class="mt-3">
+                                        <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+                                        <p class="text-secondary mb-1">@{{ user.username }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <form method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                {{ form.old_password }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                {{ form.new_password1 }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="helptext">
+                                        <ul>
+                                            <li>Your password can’t be too similar to your other personal information.</li>
+                                            <li>Your password must contain at least 8 characters.</li>
+                                            <li>Your password can’t be a commonly used password.</li>
+                                            <li>Your password can’t be entirely numeric.</li>
+                                        </ul>
+                                    </span>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                {{ form.new_password2 }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-bottom: 10px;">Save Changes</button>
+                                    <a href="#">
+                                        <button type="button" class="btn btn-dark btn-lg btn-block" style="background-color: #000000!important;">Cancel</button>
+                                    </a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+            </div>
+        </div> 
+    </div>    
+
+    {% block footer %}
+        <footer class="page-footer">
+            <!-- Copyright -->
+            <div class="footer-copyright text-center py-3 text-dark">
+                © Copyright 2022 Project Station
+            </div>
+            <!-- Copyright -->
+        </footer>
+    {% endblock %}
+
+{% endblock %}
