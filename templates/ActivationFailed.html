@@ -1,0 +1,46 @@
+{% extends "Base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container" style="margin-top: 20px;">
+        <center>
+            {% if messages %}
+                {% for message in messages %} 
+                <div class="alert {{message.tags}} m-1" role="alert" style="font-size: medium;">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %} 
+            {% endif %}
+        </center>
+    </div>
+    <div class="form shadow"> 
+        <div id="login">
+            <center>
+                <a href="{% url 'Home' %}" name = 'Home' class="logo">
+                    <img src={% static "assets/img/logo.png" %} alt="">
+                </a>
+            </center>
+            <br>   
+            <h4 class="text-center">Reset Link Expired</h4>
+            <p class="text-center">The email activation link has already been used. You cannot use it again</p>
+              <a href="{% url 'Login' %}" name='Login'>
+                <button class="button button-block">Back To Sing In</button>
+              </a>  
+            <p class="text-center mt-2">
+            </p>
+        </div> 
+    </div> <!-- /form -->
+
+    {% block footer %}
+        <footer class="page-footer">
+            <!-- Copyright -->
+            <div class="footer-copyright text-center py-3 text-dark">
+                © Copyright 2022 Nyumba Kumi
+            </div>
+            <!-- Copyright -->
+        </footer>
+    {% endblock %}
+{% endblock %}
