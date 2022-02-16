@@ -1,0 +1,19 @@
+{% extends "Base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="menu-container">
+        {% include 'Navbar.html' %}
+    </div> 
+
+    {% block footer %}
+        <footer class="page-footer">
+            <!-- Copyright -->
+            <div class="footer-copyright text-center py-3 text-dark">
+                © Copyright 2022 Django Neighbourhood
+            </div>
+            <!-- Copyright -->
+        </footer>
+    {% endblock %}
+
+{% endblock %}
