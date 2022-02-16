@@ -1,0 +1,127 @@
+{% extends "Base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="menu-container">
+        {% include 'Navbar.html' %}
+    </div>
+
+    <div class="container" style="margin-top: 30px;">
+        <center>
+            {% if messages %}
+                {% for message in messages %} 
+                <div class="alert {{message.tags}} m-1" role="alert" style="font-size: medium; margin-bottom: 30px;">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %} 
+            {% endif %}
+        </center>
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="main-breadcrumb">
+            <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
+            </ol>
+        </nav>
+        <!-- /Breadcrumb -->
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="bio layout-spacing ">
+                <div class="widget-content widget-content-area">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-12 col-md-4">
+                            <div class="upload mt-4 pr-md-4">
+                                {{ profile_form.profile_picture }}
+                            </div>
+                        </div>
+                        <div class="col-xl-8 col-lg-12 col-md-8 mt-md-0 mt-4">
+                            <div class="form">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="fullName">Username<span class="text-danger">*</span></label>
+                                            {{ user_form.username }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="fullName">First Name<span class="text-danger">*</span></label>
+                                            {{ user_form.first_name }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="fullName">Last Name<span class="text-danger">*</span></label>
+                                            {{ user_form.last_name }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="profession">Email Address</label>
+                                            {{ user_form.email }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="profession">Bio</label>
+                                            {{ profile_form.bio }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="profession">National ID</label>
+                                            {{ profile_form.national_id }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="profession">Neighbourhood</label>
+                                            {{ profile_form.neighbourhood }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-bottom: 10px;">Save Changes</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <a href="#">
+                                                <button type="button" class="btn btn-dark btn-lg btn-block">Cancel</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>   
+
+    {% block footer %}
+        <footer class="page-footer">
+            <!-- Copyright -->
+            <div class="footer-copyright text-center py-3 text-dark">
+                © Copyright 2022 Project Station
+            </div>
+            <!-- Copyright -->
+        </footer>
+    {% endblock %}
+
+{% endblock %}

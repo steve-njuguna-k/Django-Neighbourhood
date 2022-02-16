@@ -31,8 +31,8 @@
                         <div class="dropdown">
                             <button class="btn btn-link btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
                                 <div style="background-color: #ffffff;">
-                                    {% if user.profile.profile_image %}
-                                    <img class="rounded-circle" src="{{ user.profile.profile_image.url }}" height="25" width="25">
+                                    {% if user.profile.profile_picture %}
+                                    <img class="rounded-circle" src="{{ user.profile.profile_picture.url }}" height="25" width="25">
                                     {% else%}
                                     <img class="rounded-circle" src="https://www.pngall.com/wp-content/uploads/5/Profile-PNG-File.png" height="25" width="25">
                                     {% endif %}
@@ -42,7 +42,7 @@
                                 <a class="dropdown-item" href="#" name="MyProfile"><i class="fa-solid fa-user-large"></i> My Profile</a>
                                 <a class="dropdown-item" href="#" name="MyPortfolio"><i class="fa-solid fa-briefcase"></i> Businesses</a>
                                 <a class="dropdown-item" href="#" name="MyPortfolio"><i class="fa-solid fa-location-pin"></i> Neighbourhoods</a>
-                                <a class="dropdown-item" href="#" name="EditProfile"><i class="fa-solid fa-edit"></i> Edit Profile</a>
+                                <a class="dropdown-item" href="{% url 'EditProfile' user.username %}" name="EditProfile"><i class="fa-solid fa-edit"></i> Edit Profile</a>
                                 <a class="dropdown-item" href="{% url 'Settings' user.username %}" name="Settings"><i class="fa-solid fa-cog"></i> Settings</a>
                                 <a class="dropdown-item" href="{% url 'Logout' %}" name="Logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
                             </div>

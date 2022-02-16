@@ -10,7 +10,9 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.contrib.auth import update_session_auth_hash
-from .forms import PasswordChangeForm
+
+from Neighbourhood.models import Profile
+from .forms import PasswordChangeForm, UpdateProfileForm, UpdateUserForm
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from Core import settings
@@ -27,7 +29,7 @@ class EmailThread(threading.Thread):
 
 def send_activation_email(user, request):
     current_site = get_current_site(request)
-    email_subject = 'Activate Your Neighbourhood Account'
+    email_subject = 'Activate Your Nyumba Kumi Account'
     email_body = render_to_string('Account Activation Email.html', {
         'user': user,
         'domain': current_site,
@@ -124,6 +126,7 @@ def Home(request):
 @login_required(login_url='Login')
 def Settings(request, username):
     username = User.objects.get(username=username)
+    profile_details = Profile.objects.get(user=username.id)
     if request.method == "POST":
         form = PasswordChangeForm(data=request.POST, user=request.user)
         if form.is_valid():
@@ -136,4 +139,25 @@ def Settings(request, username):
             return redirect("Settings", username=username)
     else:
         form = PasswordChangeForm(data=request.POST, user=request.user)
-        return render(request, "Settings.html", {'form': form})
+        return render(request, "Settings.html", {'form': form, 'profile_details':profile_details})
+
+@login_required(login_url='Login')
+def EditProfile(request, username):
+    user = User.objects.get(username=username)
+    if request.method == 'POST':
+        user_form = UpdateUserForm(request.POST, instance=request.user)
+        profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, '✅ Your Profile Has Been Updated Successfully!')
+            return redirect('EditProfile', username=username)
+        else:
+            messages.error(request, "⚠️ Your Profile Wasn't Updated!")
+            return redirect('EditProfile', username=username)
+    else:
+        user_form = UpdateUserForm(instance=request.user)
+        profile_form = UpdateProfileForm(instance=request.user.profile)
+
+    return render(request, 'Edit Profile.html', {'user_form': user_form, 'profile_form': profile_form})
