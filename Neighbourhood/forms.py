@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import SetPasswordForm
-from .models import Profile
+from .models import Profile, Business
 
 COUNTIES = [
     ('', ('Choose')), 
@@ -125,3 +125,35 @@ def clean_old_password(self):
             code='password_incorrect',
         )
     return old_password
+
+class AddBussinessForm(forms.ModelForm):
+    name = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'placeholder': 'business name',
+            'class': 'form-control'
+        }
+    ))
+
+    description = forms.CharField(widget=forms.Textarea(
+        attrs={
+            'placeholder': 'business description',
+            'class': 'form-control'
+        }
+    ))
+
+    email = forms.CharField(widget=forms.EmailInput(
+        attrs={
+            'placeholder': 'business email',
+            'class': 'form-control'
+        }
+    ))
+
+    class Meta:
+        model = Business
+        fields = ['name', 'description', 'email']
+
+        # labels = {
+        #     'name': '',
+        #     'description': '',
+        #     'email': ''
+        # }
