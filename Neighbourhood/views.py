@@ -8,7 +8,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.contrib.auth import update_session_auth_hash
-
 from Neighbourhood.models import Business, NeighbourHood, Post, Profile
 from .forms import AddNeighbourhoodForm, AddPostForm, PasswordChangeForm, UpdateProfileForm, UpdateUserForm, AddBussinessForm
 from .tokens import account_activation_token
@@ -233,6 +232,7 @@ def MyPosts(request, username):
 def Search(request):
     if request.method == 'POST':
         search = request.POST['BusinessSearch']
+        print(search)
         businesses = Business.objects.filter(name__icontains = search).all()
         return render(request, 'Search Results.html', {'search':search, 'businesses':businesses})
     else:
