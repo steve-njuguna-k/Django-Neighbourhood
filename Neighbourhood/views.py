@@ -168,16 +168,24 @@ def MyProfile(request, username):
     return render(request, 'My Profile.html', {'profile':profile, 'profile_details':profile_details})
 
 @login_required(login_url='Login')
-def AddBusiness(request):
+def AddBusiness(request, username):
+    profile = User.objects.get(username=username)
+    profile_details = Profile.objects.get(user = profile.id)
     form = AddBussinessForm()
     if request.method == "POST":
         form = AddBussinessForm(request.POST)
         if form.is_valid():
-            business = form.save(commit=False)
-            business.owner = request.user.profile
-            business.save()
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            neighbourhood = form.cleaned_data['neighbourhood']
+            description = form.cleaned_data['description']
+            
+            neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
+            new_business = Business(name = name, email = email, neighbourhood = neighbourhood_obj, description = description, owner = request.user.profile)
+            new_business.save()
+
             messages.success(request, '✅ A Business Was Created Successfully!')
-            return redirect('Home')
+            return redirect('MyBusinesses', username=username)
         else:
             messages.error(request, "⚠️ A Business Wasn't Created!")
             return redirect('AddBusiness')
@@ -209,3 +217,9 @@ def MyNeighbourhoods(request, username):
     profile_details = Profile.objects.get(user = profile.id)
     neighbourhoods = NeighbourHood.objects.filter(neighbourhood_admin = profile.id).all()
     return render(request, 'My Neighbourhoods.html', {'neighbourhoods':neighbourhoods, 'profile_details':profile_details})
+
+def MyBusinesses(request, username):
+    profile = User.objects.get(username=username)
+    profile_details = Profile.objects.get(user = profile.id)
+    businesses = Business.objects.filter(owner = profile.id).all()
+    return render(request, 'My Businesses.html', {'businesses':businesses, 'profile_details':profile_details})

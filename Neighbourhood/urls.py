@@ -17,7 +17,8 @@ urlpatterns = [
     path('resetpassword/sent/',auth_views.PasswordResetDoneView.as_view(template_name='PasswordResetSent.html'), name = 'password_reset_done'),
     path('resetpassword/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='PasswordResetConfirm.html'), name = 'password_reset_confirm'),
     path('resetpassword/success/',auth_views.PasswordResetCompleteView.as_view(template_name='PasswordResetSuccess.html'), name = 'password_reset_complete'),
-    path('add/business/', views.AddBusiness, name='AddBusiness'),
+    path('<str:username>/add/business/', views.AddBusiness, name='AddBusiness'),
     path('<str:username>/add/neighbourhood/', views.AddNeighbourhood, name='AddNeighbourhood'),
     path('<str:username>/neighbourhoods/', views.MyNeighbourhoods, name='MyNeighbourhoods'),
+    path('<str:username>/businesses/', views.MyBusinesses, name='MyBusinesses'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

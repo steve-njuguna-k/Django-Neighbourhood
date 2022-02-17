@@ -73,7 +73,7 @@ class NeighbourHood(models.Model):
     date_updated = models.DateTimeField(auto_now=True, verbose_name='Date Updated')
 
     def __str__(self):
-        return str(self.title + '-' + self.county)
+        return str(self.title)
     
     class Meta:
         verbose_name_plural = 'NeighbourHoods'
@@ -89,7 +89,7 @@ class Profile(models.Model):
     date_updated = models.DateTimeField(auto_now=True, verbose_name='Date Updated')
     
     def __str__(self):
-        return str(self.national_id + '-' + self.user.username)
+        return str(self.user.username)
     
     class Meta:
         verbose_name_plural = 'Profiles'

@@ -5,6 +5,8 @@ from django.contrib.auth.forms import SetPasswordForm
 from .models import NeighbourHood, Profile, Business
 from cloudinary.forms import CloudinaryFileField
 
+NeighbourHoods = [ (neighbourhood.id, neighbourhood.title) for neighbourhood in NeighbourHood.objects.all() ]
+
 COUNTIES = [
     ('Choose County', ('Choose County')), 
     ('Baringo', ('Baringo')),
@@ -128,7 +130,7 @@ def clean_old_password(self):
         )
     return old_password
 
-class AddBussinessForm(forms.ModelForm):
+class AddBussinessForm(forms.Form):
     name = forms.CharField(required=True, widget=forms.TextInput(
         attrs={
             'placeholder': 'Business Name',
@@ -139,7 +141,8 @@ class AddBussinessForm(forms.ModelForm):
     description = forms.CharField(required=True, widget=forms.Textarea(
         attrs={
             'placeholder': 'Business Description',
-            'class': 'form-control mb-4'
+            'class': 'form-control mb-4',
+            'rows': 5,
         }
     ))
 
@@ -150,16 +153,16 @@ class AddBussinessForm(forms.ModelForm):
         }
     ))
 
-    neighbourhood = forms.ChoiceField(required=True, widget=forms.Select(
+    neighbourhood = forms.ChoiceField(choices=NeighbourHoods, required=True, widget=forms.Select(
         attrs={
             'placeholder': 'Neighbourhood',
             'class': 'form-control mb-4'
         }
     ))
 
-    class Meta:
-        model = Business
-        fields = ['name', 'description', 'email', 'neighbourhood']
+    # class Meta:
+    #     model = Business
+    #     fields = ['name', 'description', 'email', 'neighbourhood']
 
 class AddNeighbourhoodForm(forms.ModelForm):
     title = forms.CharField(widget=forms.TextInput(
