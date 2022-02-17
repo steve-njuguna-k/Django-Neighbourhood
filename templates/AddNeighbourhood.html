@@ -26,13 +26,13 @@
         </nav>
         <!-- /Breadcrumb -->
 
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" style="margin-top: 50px;">
             {% csrf_token %}
             <div class="bio layout-spacing ">
                 <div class="widget-content widget-content-area">
                     <div class="row">
                         <div class="col-xl-4 col-lg-12 col-md-4">
-                            <div class="upload mt-4 pr-md-4">
+                            <div class="upload">
                                 {{ form.neighbourhood_logo }}
                             </div>
                         </div>

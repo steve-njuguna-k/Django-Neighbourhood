@@ -26,25 +26,25 @@
         </nav>
         <!-- /Breadcrumb -->
 
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" style="margin-top: 50px;">
             {% csrf_token %}
             <div class="bio layout-spacing ">
                 <div class="widget-content widget-content-area">
                     <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-4">
-                            <div class="upload mt-4 pr-md-4">
+                            <div class="upload">
                                 <label for="fullName">Title <span class="text-danger">*</span></label>
                                 {{ form.title }}
                             </div>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-4">
-                            <div class="upload mt-4 pr-md-4">
+                            <div class="upload">
                                 <label for="fullName">Category <span class="text-danger">*</span></label>
                                 {{ form.category }}
                             </div>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-4">
-                            <div class="upload mt-4 pr-md-4">
+                            <div class="upload">
                                 <label for="fullName">Neighbourhood <span class="text-danger">*</span></label>
                                 {{ form.neighbourhood }}
                             </div>

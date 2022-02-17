@@ -118,7 +118,8 @@ def Logout(request):
     return redirect('Home')
 
 def Home(request):
-    return render(request, 'Index.html')
+    neighbourhoods = NeighbourHood.objects.all()
+    return render(request, 'Index.html', {'neighbourhoods':neighbourhoods})
 
 @login_required(login_url='Login')
 def Settings(request, username):
