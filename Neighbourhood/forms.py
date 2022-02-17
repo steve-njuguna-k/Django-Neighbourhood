@@ -1,10 +1,12 @@
+from random import choices
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import SetPasswordForm
-from .models import Profile, Business
+from .models import NeighbourHood, Profile, Business
+from cloudinary.forms import CloudinaryFileField
 
 COUNTIES = [
-    ('', ('Choose')), 
+    ('Choose County', ('Choose County')), 
     ('Baringo', ('Baringo')),
     ('Bomet', ('Bomet')),
     ('Bungoma ', ('Bungoma ')),
@@ -159,8 +161,35 @@ class AddBussinessForm(forms.ModelForm):
         model = Business
         fields = ['name', 'description', 'email', 'neighbourhood']
 
-        # labels = {
-        #     'name': '',
-        #     'description': '',
-        #     'email': ''
-        # }
+class AddNeighbourhoodForm(forms.ModelForm):
+    title = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'placeholder': 'Title',
+            'class': 'form-control mb-4'
+        }
+    ))
+
+    location = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'placeholder': 'Location',
+            'class': 'form-control mb-4'
+        }
+    ))
+
+    county = forms.ChoiceField(widget=forms.Select(
+        attrs={
+            'class': 'form-control mb-4'
+        }
+    ), choices=COUNTIES)
+
+    neighbourhood_logo = forms.ImageField(required=False, widget=forms.FileInput(
+        attrs={
+            'class': 'dropify', 
+            'data-height':300, 
+            'data-max-file-size':"1M"
+        }
+    ))
+    
+    class Meta:
+        model = NeighbourHood
+        fields = ['title', 'location', 'county', 'neighbourhood_logo']

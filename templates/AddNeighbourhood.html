@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-
     <div class="container" style="margin-top: 30px;">
         <center>
             {% if messages %}
@@ -21,8 +20,8 @@
         <nav aria-label="breadcrumb" class="main-breadcrumb">
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-            <li class="breadcrumb-item"><a href="javascript:void(0)">{{ profile_details.user.first_name }} {{ profile_details.user.last_name }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Neighbourhood</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add</li>
             </ol>
         </nav>
         <!-- /Breadcrumb -->
@@ -34,58 +33,32 @@
                     <div class="row">
                         <div class="col-xl-4 col-lg-12 col-md-4">
                             <div class="upload mt-4 pr-md-4">
-                                {{ profile_form.profile_picture }}
+                                {{ form.neighbourhood_logo }}
                             </div>
                         </div>
                         <div class="col-xl-8 col-lg-12 col-md-8 mt-md-0 mt-4">
                             <div class="form">
                                 <div class="row">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label for="fullName">Username<span class="text-danger">*</span></label>
-                                            {{ user_form.username }}
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label for="fullName">First Name<span class="text-danger">*</span></label>
-                                            {{ user_form.first_name }}
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label for="fullName">Last Name<span class="text-danger">*</span></label>
-                                            {{ user_form.last_name }}
+                                            <label for="fullName">Title <span class="text-danger">*</span></label>
+                                            {{ form.title }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label for="profession">Email Address</label>
-                                            {{ user_form.email }}
+                                            <label for="profession">Location <span class="text-danger">*</span></label>
+                                            {{ form.location }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label for="profession">Bio</label>
-                                            {{ profile_form.bio }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="profession">National ID</label>
-                                            {{ profile_form.national_id }}
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="profession">Neighbourhood</label>
-                                            {{ profile_form.neighbourhood }}
+                                            <label for="profession">County <span class="text-danger">*</span></label>
+                                            {{ form.county }}
                                         </div>
                                     </div>
                                 </div>
@@ -109,7 +82,7 @@
                 </div>
             </div>
         </form>
-    </div>   
+    </div>
 
     {% block footer %}
         <footer class="page-footer">

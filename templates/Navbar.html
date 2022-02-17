@@ -28,7 +28,7 @@
                         <a href="{% url 'AddBusiness' %}" name="AddBusiness">
                             <button type="submit" class="btn btn-primary btn-md" style="margin-right: 20px;"><i class="fa-solid fa-plus"></i> Add Business</button>
                         </a>
-                        <a href="#" name="AddBusiness">
+                        <a href="{% url 'AddNeighbourhood' user.username %}" name="AddNeighbourhood">
                             <button type="submit" class="btn btn-primary btn-md" style="margin-right: 20px;"><i class="fa-solid fa-house"></i></button>
                         </a>
                         <div class="dropdown">
@@ -44,7 +44,7 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" href="{% url 'MyProfile' user.username %}" name="MyProfile"><i class="fa-solid fa-user-large"></i> My Profile</a>
                                 <a class="dropdown-item" href="#" name="MyPortfolio"><i class="fa-solid fa-briefcase"></i> Businesses</a>
-                                <a class="dropdown-item" href="#" name="MyPortfolio"><i class="fa-solid fa-location-pin"></i> Neighbourhoods</a>
+                                <a class="dropdown-item" href="{% url 'MyNeighbourhoods' user.username %}" name="MyNeighbourhoods"><i class="fa-solid fa-location-pin"></i> Neighbourhoods</a>
                                 <a class="dropdown-item" href="{% url 'EditProfile' user.username %}" name="EditProfile"><i class="fa-solid fa-edit"></i> Edit Profile</a>
                                 <a class="dropdown-item" href="{% url 'Settings' user.username %}" name="Settings"><i class="fa-solid fa-cog"></i> Settings</a>
                                 <a class="dropdown-item" href="{% url 'Logout' %}" name="Logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>

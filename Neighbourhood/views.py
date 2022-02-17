@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth import update_session_auth_hash
 
 from Neighbourhood.models import Business, NeighbourHood, Profile
-from .forms import PasswordChangeForm, UpdateProfileForm, UpdateUserForm, AddBussinessForm
+from .forms import AddNeighbourhoodForm, PasswordChangeForm, UpdateProfileForm, UpdateUserForm, AddBussinessForm
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from Core import settings
@@ -184,3 +184,28 @@ def AddBusiness(request):
     else:
         form = AddBussinessForm()
     return render(request, 'AddBusiness.html', {'form':form})
+
+@login_required(login_url='Login')
+def AddNeighbourhood(request, username):
+    profile = User.objects.get(username=username)
+    profile_details = Profile.objects.get(user = profile.id)
+    if request.method == 'POST':
+        form = AddNeighbourhoodForm(request.POST, request.FILES)
+        if form.is_valid():
+            neighbourhood = form.save(commit=False)
+            neighbourhood.neighbourhood_admin = request.user
+            neighbourhood.save()
+            messages.success(request, '✅ A Neighbourhood Was Created Successfully!')
+            return redirect('MyNeighbourhoods', username=username)
+        else:
+            messages.error(request, "⚠️ A Neighbourhood Wasn't Created!")
+            return redirect('AddNeighbourhood')
+    else:
+        form = AddNeighbourhoodForm()
+    return render(request, 'AddNeighbourhood.html', {'form':form, 'profile_details':profile_details})
+
+def MyNeighbourhoods(request, username):
+    profile = User.objects.get(username=username)
+    profile_details = Profile.objects.get(user = profile.id)
+    neighbourhoods = NeighbourHood.objects.filter(neighbourhood_admin = profile.id).all()
+    return render(request, 'My Neighbourhoods.html', {'neighbourhoods':neighbourhoods, 'profile_details':profile_details})
