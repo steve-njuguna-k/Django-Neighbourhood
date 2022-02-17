@@ -9,8 +9,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.contrib.auth import update_session_auth_hash
 
-from Neighbourhood.models import Business, NeighbourHood, Profile
-from .forms import AddNeighbourhoodForm, PasswordChangeForm, UpdateProfileForm, UpdateUserForm, AddBussinessForm
+from Neighbourhood.models import Business, NeighbourHood, Post, Profile
+from .forms import AddNeighbourhoodForm, AddPostForm, PasswordChangeForm, UpdateProfileForm, UpdateUserForm, AddBussinessForm
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from Core import settings
@@ -223,3 +223,41 @@ def MyBusinesses(request, username):
     profile_details = Profile.objects.get(user = profile.id)
     businesses = Business.objects.filter(owner = profile.id).all()
     return render(request, 'My Businesses.html', {'businesses':businesses, 'profile_details':profile_details})
+
+def MyPosts(request, username):
+    profile = User.objects.get(username=username)
+    profile_details = Profile.objects.get(user = profile.id)
+    posts = Post.objects.filter(author = profile.id).all()
+    return render(request, 'My Posts.html', {'posts':posts, 'profile_details':profile_details})
+
+def Search(request):
+    if request.method == 'POST':
+        search = request.POST['BusinessSearch']
+        businesses = Business.objects.filter(name__icontains = search).all()
+        return render(request, 'Search Results.html', {'search':search, 'businesses':businesses})
+    else:
+        return render(request, 'Search Results.html')
+
+@login_required(login_url='Login')
+def AddPost(request, username):
+    profile = User.objects.get(username=username)
+    if request.method == "POST":
+        form = AddPostForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            description = form.cleaned_data['description']
+            neighbourhood = form.cleaned_data['neighbourhood']
+            category = form.cleaned_data['category']
+            
+            neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
+            new_post = Post(title = title, category = category, neighbourhood = neighbourhood_obj, description = description, author = request.user.profile)
+            new_post.save()
+
+            messages.success(request, '✅ Your Post Was Created Successfully!')
+            return redirect('MyPosts', username=username)
+        else:
+            messages.error(request, "⚠️ Your Post Wasn't Created!")
+            return redirect('AddPost', username=username)
+    else:
+        form = AddPostForm()
+    return render(request, 'AddPost.html', {'form':form})

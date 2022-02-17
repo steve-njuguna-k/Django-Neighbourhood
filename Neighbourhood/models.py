@@ -52,15 +52,15 @@ COUNTIES = [
     ('West Pokot', ('West Pokot')),
 ]
 
-CHOICES = (
-        ('1', 'Crimes and Safety'),
-        ('2', 'Health Emergency'),
-        ('3', 'Recommendations'),
-        ('4', 'Fire Breakouts'),
-        ('5', 'Lost and Found'),
-        ('6', 'Death'),
-        ('7', 'Event'),
-    )
+CHOICES = [
+    ('1', 'Crimes and Safety'),
+    ('2', 'Health Emergency'),
+    ('3', 'Recommendations'),
+    ('4', 'Fire Breakouts'),
+    ('5', 'Lost and Found'),
+    ('6', 'Death'),
+    ('7', 'Event'),
+]
 
 # Create your models here.
 class NeighbourHood(models.Model):

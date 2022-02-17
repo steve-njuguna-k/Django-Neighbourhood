@@ -15,10 +15,12 @@
                     <form action="#" method="POST" class="form-inline my-2 my-lg-0 searchbar">
                         <div class="bg-light rounded searchbar">
                             <div class="input-group searchbar">
-                                <input type="search" name="search" placeholder="Search For Posts, Neighbourhoods & Businesses" class="form-control border-0 bg-light searchbar-nv" style="width: 415px;">
-                                <div class="input-group-append searchbar">
-                                  <button type="submit" class="btn btn-link searchbar"><i class="fa-solid fa-magnifying-glass"></i></button>
-                                </div>
+                                <form class="form" role="search" method="POST" action="{% url 'Search' %}">
+                                    {% csrf_token %}
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Search For A Business" name="BusinessSearch" style="width: 415px;">
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </form>
@@ -26,10 +28,13 @@
                 <div class="d-flex">
                     {% if user.is_authenticated %}
                         <a href="{% url 'AddBusiness' user.username %}" name="AddBusiness">
-                            <button type="submit" class="btn btn-primary btn-md" style="margin-right: 20px;"><i class="fa-solid fa-plus"></i> Add Business</button>
+                            <button type="button" class="btn btn-primary btn-md" style="margin-right: 20px;"><i class="fa-solid fa-briefcase"></i></button>
                         </a>
                         <a href="{% url 'AddNeighbourhood' user.username %}" name="AddNeighbourhood">
-                            <button type="submit" class="btn btn-primary btn-md" style="margin-right: 20px;"><i class="fa-solid fa-house"></i></button>
+                            <button type="button" class="btn btn-primary btn-md" style="margin-right: 20px;"><i class="fa-solid fa-house"></i></button>
+                        </a>
+                        <a href="{% url 'AddPost' user.username %}" name="AddPost">
+                            <button type="button" class="btn btn-primary btn-md" style="margin-right: 20px;"><i class="fa-solid fa-file"></i></button>
                         </a>
                         <div class="dropdown">
                             <button class="btn btn-link btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
@@ -45,6 +50,7 @@
                                 <a class="dropdown-item" href="{% url 'MyProfile' user.username %}" name="MyProfile"><i class="fa-solid fa-user-large"></i> My Profile</a>
                                 <a class="dropdown-item" href="{% url 'MyBusinesses' user.username %}" name="MyBusinesses"><i class="fa-solid fa-briefcase"></i> Businesses</a>
                                 <a class="dropdown-item" href="{% url 'MyNeighbourhoods' user.username %}" name="MyNeighbourhoods"><i class="fa-solid fa-location-pin"></i> Neighbourhoods</a>
+                                <a class="dropdown-item" href="{% url 'MyPosts' user.username %}" name="MyPosts"><i class="fa-solid fa-file"></i> Posts</a>
                                 <a class="dropdown-item" href="{% url 'EditProfile' user.username %}" name="EditProfile"><i class="fa-solid fa-edit"></i> Edit Profile</a>
                                 <a class="dropdown-item" href="{% url 'Settings' user.username %}" name="Settings"><i class="fa-solid fa-cog"></i> Settings</a>
                                 <a class="dropdown-item" href="{% url 'Logout' %}" name="Logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>

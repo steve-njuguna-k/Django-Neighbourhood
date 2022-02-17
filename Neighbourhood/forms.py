@@ -2,7 +2,7 @@ from random import choices
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import SetPasswordForm
-from .models import NeighbourHood, Profile, Business
+from .models import NeighbourHood, Post, Profile, Business
 from cloudinary.forms import CloudinaryFileField
 
 NeighbourHoods = [ (neighbourhood.id, neighbourhood.title) for neighbourhood in NeighbourHood.objects.all() ]
@@ -56,6 +56,16 @@ COUNTIES = [
     ('Vihiga', ('Vihiga')),
     ('Wajir', ('Wajir')),
     ('West Pokot', ('West Pokot')),
+]
+
+CATEGORIES = [
+    ('1', 'Crimes and Safety'),
+    ('2', 'Health Emergency'),
+    ('3', 'Recommendations'),
+    ('4', 'Fire Breakouts'),
+    ('5', 'Lost and Found'),
+    ('6', 'Death'),
+    ('7', 'Event'),
 ]
 
 class UpdateUserForm(forms.ModelForm):
@@ -160,10 +170,6 @@ class AddBussinessForm(forms.Form):
         }
     ))
 
-    # class Meta:
-    #     model = Business
-    #     fields = ['name', 'description', 'email', 'neighbourhood']
-
 class AddNeighbourhoodForm(forms.ModelForm):
     title = forms.CharField(widget=forms.TextInput(
         attrs={
@@ -196,3 +202,9 @@ class AddNeighbourhoodForm(forms.ModelForm):
     class Meta:
         model = NeighbourHood
         fields = ['title', 'location', 'county', 'neighbourhood_logo']
+
+class AddPostForm(forms.Form):
+    title = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control mb-4', 'placeholder':'Post Title'}))
+    description = forms.CharField(required=True, widget=forms.Textarea(attrs={'class': 'form-control mb-4', 'rows': 5, 'placeholder':'Description'}))
+    category = forms.ChoiceField(choices=CATEGORIES, required=True, widget=forms.Select(attrs={'class': 'form-control mb-4', 'placeholder':'Select Category'}))
+    neighbourhood = forms.ChoiceField(choices=NeighbourHoods, required=True, widget=forms.Select(attrs={'placeholder': 'Neighbourhood','class': 'form-control mb-4'}))
