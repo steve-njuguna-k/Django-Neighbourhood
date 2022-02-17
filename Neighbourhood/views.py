@@ -1,18 +1,16 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.utils.encoding import force_str
-from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str, force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.contrib.auth import update_session_auth_hash
 
-from Neighbourhood.models import Profile
-from .forms import PasswordChangeForm, UpdateProfileForm, UpdateUserForm
+from Neighbourhood.models import Business, NeighbourHood, Profile
+from .forms import PasswordChangeForm, UpdateProfileForm, UpdateUserForm, AddBussinessForm
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from Core import settings
@@ -168,3 +166,21 @@ def MyProfile(request, username):
     profile = User.objects.get(username=username)
     profile_details = Profile.objects.get(user = profile.id)
     return render(request, 'My Profile.html', {'profile':profile, 'profile_details':profile_details})
+
+@login_required(login_url='Login')
+def AddBusiness(request):
+    form = AddBussinessForm()
+    if request.method == "POST":
+        form = AddBussinessForm(request.POST)
+        if form.is_valid():
+            business = form.save(commit=False)
+            business.owner = request.user.profile
+            business.save()
+            messages.success(request, '✅ A Business Was Created Successfully!')
+            return redirect('Home')
+        else:
+            messages.error(request, "⚠️ A Business Wasn't Created!")
+            return redirect('AddBusiness')
+    else:
+        form = AddBussinessForm()
+    return render(request, 'AddBusiness.html', {'form':form})

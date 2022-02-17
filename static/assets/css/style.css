@@ -308,3 +308,8 @@ h1, h2, h3, h4, h5, h6, p{
 .fa:hover{
     color: #73db73;
 }
+
+textarea {
+	height: 150px;
+	resize: none;
+}
