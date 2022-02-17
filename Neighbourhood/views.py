@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth import update_session_auth_hash
 
 from Neighbourhood.models import Business, NeighbourHood, Profile
-from .forms import PasswordChangeForm, UpdateProfileForm, UpdateUserForm, AddBussinessForm
+from .forms import AddNeighbourhoodForm, PasswordChangeForm, UpdateProfileForm, UpdateUserForm, AddBussinessForm
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from Core import settings
@@ -181,11 +181,24 @@ def add_business(request):
         form = AddBussinessForm(request.POST)
         # if form.is_valid():
             # new_business = Business(
-                
+
             # )
     else:
         form = AddBussinessForm()
     return render(request, 'AddBusiness.html', {'form': form})
+
+# for adding a new neighbourhood
+@login_required
+def add_neighbourhood(request):
+    if request.method == 'POST':
+        form = AddNeighbourhoodForm(request.POST)
+        # if form.is_valid():
+            # new_business = Business(
+
+            # )
+    else:
+        form = AddNeighbourhoodForm()
+    return render(request, 'AddNeighbourhood.html', {'form': form})
 
 '''
 1. We are only creating the User and not the Profile during register
