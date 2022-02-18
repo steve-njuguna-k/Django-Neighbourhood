@@ -169,28 +169,21 @@ MESSAGE_TAGS = {
 }
 
 #Email Setup
-# EMAIL_FROM_USER = os.environ.get("EMAIL_FROM_USER")
-# EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
-# EMAIL_HOST = os.environ.get("EMAIL_HOST")
-# EMAIL_PORT = os.environ.get("EMAIL_PORT")
-# EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
-# EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-# EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-EMAIL_FROM_USER = 'pervez.nagi@student.moringaschool.com'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'pervez.nagi@student.moringaschool.com'
-EMAIL_HOST_PASSWORD = 'I$m@ilPerve3'
+EMAIL_FROM_USER = os.environ.get("EMAIL_FROM_USER")
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_PORT = os.environ.get("EMAIL_PORT")
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Configure Django App for Heroku.
-# import django_heroku
-# django_heroku.settings(locals())
+#Configure Django App for Heroku.
+import django_heroku
+django_heroku.settings(locals())
 
-# DISABLE_COLLECTSTATIC = os.environ.get('DISABLE_COLLECTSTATIC') 
+DISABLE_COLLECTSTATIC = os.environ.get('DISABLE_COLLECTSTATIC') 
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 

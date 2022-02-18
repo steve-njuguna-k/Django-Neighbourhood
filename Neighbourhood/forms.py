@@ -3,7 +3,6 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import SetPasswordForm
 from .models import NeighbourHood, Profile
-from cloudinary.forms import CloudinaryFileField
 
 NeighbourHoods = [ (neighbourhood.id, neighbourhood.title) for neighbourhood in NeighbourHood.objects.all() ]
 

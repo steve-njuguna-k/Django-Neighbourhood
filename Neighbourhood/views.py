@@ -338,10 +338,11 @@ def SingleNeighbourhood(request, title):
     neighbourhood = get_object_or_404(NeighbourHood, title=title)
     businesses = Business.objects.filter(neighbourhood = neighbourhood.id).all()
     posts = Post.objects.filter(neighbourhood = neighbourhood.id).all()
+    members = Membership.objects.filter(neighbourhood_membership=neighbourhood.id).all()
     member = Membership.objects.filter(user = current_profile.id, neighbourhood_membership = neighbourhood.id)
     is_member = False
     if member:
         is_member = True
     else:
         is_member = False
-    return render(request, 'Neighbourhood.html', {'neighbourhood': neighbourhood, 'businesses':businesses, 'posts':posts, 'is_member':is_member})
+    return render(request, 'Neighbourhood.html', {'neighbourhood': neighbourhood, 'businesses':businesses, 'posts':posts, 'is_member':is_member, 'members':members})
