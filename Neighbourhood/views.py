@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.utils.encoding import force_str, force_bytes
@@ -148,8 +148,22 @@ def EditProfile(request, username):
         profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
 
         if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
+            neighbourhood = profile_form.cleaned_data['neighbourhood']
+            bio = profile_form.cleaned_data['bio']
+            national_id = profile_form.cleaned_data['national_id']
+            first_name = user_form.cleaned_data['first_name']
+            last_name = user_form.cleaned_data['last_name']
+            username = user_form.cleaned_data['username']
+            user.username = username
+            user.first_name = first_name
+            user.last_name = last_name
+            profile_details.national_id = national_id
+            profile_details.bio = bio
+            profile_details.neighbourHood = NeighbourHood.objects.get(pk=int(neighbourhood))
+            user.save()
+            profile_details.save()
+            # username = user_form.save()
+            # username = profile_form.save()
             messages.success(request, '✅ Your Profile Has Been Updated Successfully!')
             return redirect('EditProfile', username=username)
         else:
@@ -282,3 +296,7 @@ def FollowNeighbourhood(request, title):
             neighbourhoodToadd.save()
             messages.success(request, "✅ You Are Now A Member Of This NeighbourHood!")
             return redirect('Home')
+
+def get_neighbourhood(request, neighbourhood_id):
+    neighbourhood = get_object_or_404(NeighbourHood, pk=neighbourhood_id)
+    return render(request, 'neighbourhood.html', {'object': neighbourhood})

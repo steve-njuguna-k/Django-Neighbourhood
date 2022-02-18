@@ -24,7 +24,11 @@
                 <div class="col-sm-4">
                     <div class="card" style="margin-bottom: 30px; border-radius: 3px;">
                         <a href="#" name=""></a>
-                            <img src="{{ neighbourhood.neighbourhood_logo.url }}" class="card-img-top" style="border-radius: 3px 3px 0px 0px;" alt="...">
+                            {% if neighbourhood.neighbourhood_logo %}
+                                <img src="{{ neighbourhood.neighbourhood_logo.url }}" class="card-img-top" style="border-radius: 3px 3px 0px 0px;" alt="...">
+                            {% else %}
+                                <img src="https://images.pexels.com/photos/1051321/pexels-photo-1051321.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" class="card-img-top" style="border-radius: 3px 3px 0px 0px;" alt="...">
+                            {% endif %}
                         </a>
                         <div class="card-body">
                             <h5 class="card-title">{{ neighbourhood.title }}</h5>
