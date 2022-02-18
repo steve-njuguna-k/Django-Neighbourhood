@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.contrib.auth import update_session_auth_hash
-from Neighbourhood.models import Business, NeighbourHood, Post, Profile
+from Neighbourhood.models import Business, Membership, NeighbourHood, Post, Profile
 from .forms import AddNeighbourhoodForm, AddPostForm, PasswordChangeForm, UpdateProfileForm, UpdateUserForm, AddBussinessForm
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
@@ -262,3 +262,23 @@ def AddPost(request, username):
     else:
         form = AddPostForm()
     return render(request, 'AddPost.html', {'form':form})
+
+@login_required(login_url='Login')
+def FollowNeighbourhood(request, title):
+    neighbourhoodTobefollowed = NeighbourHood.objects.get(title = title)
+    currentUser = request.user
+    is_followed = False
+
+    if not neighbourhoodTobefollowed:
+        messages.error(request, "⚠️ NeighbourHood Does Not Exist!")
+        return redirect('Home')
+    else:
+        follow = Membership.objects.filter(user = currentUser, neighbourhood_membership = neighbourhoodTobefollowed)
+        if follow:
+            messages.error(request, '⚠️ You Can Only Follow A NeighbourHood Once!')
+            return redirect('Home')
+        else:
+            neighbourhoodToadd = Membership(user = currentUser, neighbourhood_membership = neighbourhoodTobefollowed)
+            neighbourhoodToadd.save()
+            messages.success(request, "✅ You Are Now A Member Of This NeighbourHood!")
+            return redirect('Home')
