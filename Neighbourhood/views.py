@@ -118,15 +118,8 @@ def Logout(request):
     return redirect('Home')
 
 def Home(request):
-    current_profile = request.user.profile
     neighbourhoods = NeighbourHood.objects.all()
-    member = Membership.objects.filter(user = current_profile)
-    is_member = False
-    if member:
-        is_member = True
-    else:
-        is_member = False
-    return render(request, 'Index.html', {'neighbourhoods':neighbourhoods, 'is_member':is_member})
+    return render(request, 'Index.html', {'neighbourhoods':neighbourhoods})
 
 @login_required(login_url='Login')
 def Settings(request, username):
@@ -200,13 +193,21 @@ def AddBusiness(request, username):
             email = form.cleaned_data['email']
             neighbourhood = form.cleaned_data['neighbourhood']
             description = form.cleaned_data['description']
-            
-            neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
-            new_business = Business(name = name, email = email, neighbourhood = neighbourhood_obj, description = description, owner = request.user.profile)
-            new_business.save()
 
-            messages.success(request, '✅ A Business Was Created Successfully!')
-            return redirect('MyBusinesses', username=username)
+            neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
+            member = Membership.objects.filter(user = profile.id, neighbourhood_membership = neighbourhood_obj.id)
+
+            if not member:
+                messages.error(request, "⚠️ You Need To Be A Member of The Selected Neighbourhood First!")
+                return redirect('AddBusiness', username=username)
+
+            else:
+                neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
+                new_business = Business(name = name, email = email, neighbourhood = neighbourhood_obj, description = description, owner = request.user.profile)
+                new_business.save()
+
+                messages.success(request, '✅ A Business Was Created Successfully!')
+                return redirect('MyBusinesses', username=username)
         else:
             messages.error(request, "⚠️ A Business Wasn't Created!")
             return redirect('AddBusiness')
@@ -265,8 +266,8 @@ def Search(request):
 
 @login_required(login_url='Login')
 def AddPost(request, username):
-    profile = User.objects.get(username=username)
-    member = Membership.objects.filter(user = profile)
+    user = User.objects.get(username=username)
+    profile = Profile.objects.get(user=user.id)
 
     if request.method == "POST":
         form = AddPostForm(request.POST)
@@ -277,10 +278,10 @@ def AddPost(request, username):
             category = form.cleaned_data['category']
 
             neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
-            neighbourhood_id = Membership.objects.filter(neighbourhood_membership = neighbourhood_obj.id)
+            member = Membership.objects.filter(user = profile.id, neighbourhood_membership = neighbourhood_obj.id)
 
-            if member != neighbourhood_id:
-                messages.error(request, "⚠️ You Need To Be A Member of The Selected Neighbourhoof First!")
+            if not member:
+                messages.error(request, "⚠️ You Need To Be A Member of The Selected Neighbourhood First!")
                 return redirect('AddPost', username=username)
 
             else:
@@ -337,7 +338,7 @@ def SingleNeighbourhood(request, title):
     neighbourhood = get_object_or_404(NeighbourHood, title=title)
     businesses = Business.objects.filter(neighbourhood = neighbourhood.id).all()
     posts = Post.objects.filter(neighbourhood = neighbourhood.id).all()
-    member = Membership.objects.filter(user = current_profile)
+    member = Membership.objects.filter(user = current_profile.id, neighbourhood_membership = neighbourhood.id)
     is_member = False
     if member:
         is_member = True

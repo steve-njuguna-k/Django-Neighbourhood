@@ -43,22 +43,16 @@
                             <div class="d-flex flex-row user-info">
                                 <div class="d-flex flex-column justify-content-start ml-2">
                                     <a href="#">
-                                        <span class="name"><b>{{ neighbourhood.neighbourhood_admin.first_name }} {{ neighbourhood.neighbourhood_admin.last_name }} <span class="text-dark">(Hood Admin)</span></b></span>
+                                        <span class="name"><b>{{ neighbourhood.neighbourhood_admin.first_name }} {{ neighbourhood.neighbourhood_admin.last_name }} <span class="text-dark">(Admin)</span></b></span>
                                     </a>
                                     <span class="text-muted" style="font-size: small;"><i class="fas fa-calendar-alt"></i> {{ neighbourhood.date_created }}</span>
                                 </div>
                                 <br>
                             </div>
                             <br>
-                            {% if neighbourhood.is_member %}
-                            <a href="{% url 'LeaveNeighbourhood' neighbourhood.title %} ">
-                                <button class="btn btn-danger btn-block">Leave NeighbourHood</button>
+                            <a href="{% url 'SingleNeighbourhood' neighbourhood.title %}" name="SingleNeighbourhood">
+                                <button class="btn btn-primary btn-block">More Details</button>
                             </a>
-                            {% else %}
-                                <a href="{% url 'JoinNeighbourhood' neighbourhood.title %} ">
-                                    <button class="btn btn-primary btn-block">Become A Member</button>
-                                </a>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
