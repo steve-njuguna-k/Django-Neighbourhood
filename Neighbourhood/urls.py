@@ -24,5 +24,6 @@ urlpatterns = [
     path('<str:username>/businesses/', views.MyBusinesses, name='MyBusinesses'),
     path('search', views.Search, name="Search"),
     path('<str:username>/add/post/', views.AddPost, name='AddPost'),
-    path('follow/neighbourhood/<str:title>', views.FollowNeighbourhood, name="FollowNeighbourhood"),
+    path('follow/neighbourhood/<str:title>', views.JoinNeighbourhood, name="JoinNeighbourhood"),
+    path('neighbourhood/<str:title>/', views.SingleNeighbourhood, name='SingleNeighbourhood'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

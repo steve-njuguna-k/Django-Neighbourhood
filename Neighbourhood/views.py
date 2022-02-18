@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.utils.encoding import force_str, force_bytes
@@ -118,8 +118,15 @@ def Logout(request):
     return redirect('Home')
 
 def Home(request):
+    current_profile = request.user.profile
     neighbourhoods = NeighbourHood.objects.all()
-    return render(request, 'Index.html', {'neighbourhoods':neighbourhoods})
+    member = Membership.objects.filter(user = current_profile)
+    is_member = False
+    if member:
+        is_member = True
+    else:
+        is_member = False
+    return render(request, 'Index.html', {'neighbourhoods':neighbourhoods, 'is_member':is_member})
 
 @login_required(login_url='Login')
 def Settings(request, username):
@@ -148,8 +155,22 @@ def EditProfile(request, username):
         profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
 
         if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
+            neighbourhood = profile_form.cleaned_data['neighbourhood']
+            bio = profile_form.cleaned_data['bio']
+            national_id = profile_form.cleaned_data['national_id']
+            first_name = user_form.cleaned_data['first_name']
+            last_name = user_form.cleaned_data['last_name']
+            username = user_form.cleaned_data['username']
+            user.username = username
+            user.first_name = first_name
+            user.last_name = last_name
+            profile_details.national_id = national_id
+            profile_details.bio = bio
+            profile_details.neighbourHood = NeighbourHood.objects.get(pk=int(neighbourhood))
+            user.save()
+            profile_details.save()
+            # username = user_form.save()
+            # username = profile_form.save()
             messages.success(request, '✅ Your Profile Has Been Updated Successfully!')
             return redirect('EditProfile', username=username)
         else:
@@ -264,21 +285,34 @@ def AddPost(request, username):
     return render(request, 'AddPost.html', {'form':form})
 
 @login_required(login_url='Login')
-def FollowNeighbourhood(request, title):
-    neighbourhoodTobefollowed = NeighbourHood.objects.get(title = title)
-    currentUser = request.user
+def JoinNeighbourhood(request, title):
+    neighbourhoodTobejoined = NeighbourHood.objects.get(title = title)
+    currentUserProfile = request.user.profile
     is_followed = False
 
-    if not neighbourhoodTobefollowed:
+    if not neighbourhoodTobejoined:
         messages.error(request, "⚠️ NeighbourHood Does Not Exist!")
         return redirect('Home')
     else:
-        follow = Membership.objects.filter(user = currentUser, neighbourhood_membership = neighbourhoodTobefollowed)
-        if follow:
-            messages.error(request, '⚠️ You Can Only Follow A NeighbourHood Once!')
+        joined = Membership.objects.filter(user = currentUserProfile, neighbourhood_membership = neighbourhoodTobejoined)
+        if joined:
+            messages.error(request, '⚠️ You Can Only Join A NeighbourHood Once!')
             return redirect('Home')
         else:
-            neighbourhoodToadd = Membership(user = currentUser, neighbourhood_membership = neighbourhoodTobefollowed)
+            neighbourhoodToadd = Membership(user = currentUserProfile, neighbourhood_membership = neighbourhoodTobejoined)
             neighbourhoodToadd.save()
             messages.success(request, "✅ You Are Now A Member Of This NeighbourHood!")
             return redirect('Home')
+
+def SingleNeighbourhood(request, title):
+    current_profile = request.user.profile
+    neighbourhood = get_object_or_404(NeighbourHood, title=title)
+    businesses = Business.objects.filter(neighbourhood = neighbourhood.id).all()
+    posts = Post.objects.filter(neighbourhood = neighbourhood.id).all()
+    member = Membership.objects.filter(user = current_profile)
+    is_member = False
+    if member:
+        is_member = True
+    else:
+        is_member = False
+    return render(request, 'Neighbourhood.html', {'neighbourhood': neighbourhood, 'businesses':businesses, 'posts':posts, 'is_member':is_member})

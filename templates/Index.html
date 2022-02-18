@@ -23,8 +23,12 @@
                 {% for neighbourhood in neighbourhoods %}
                 <div class="col-sm-4">
                     <div class="card" style="margin-bottom: 30px; border-radius: 3px;">
-                        <a href="#" name=""></a>
-                            <img src="{{ neighbourhood.neighbourhood_logo.url }}" class="card-img-top" style="border-radius: 3px 3px 0px 0px;" alt="...">
+                        <a href="{% url 'SingleNeighbourhood' neighbourhood.title %}" name="SingleNeighbourhood">
+                            {% if neighbourhood.neighbourhood_logo %}
+                                <img src="{{ neighbourhood.neighbourhood_logo.url }}" class="card-img-top" style="border-radius: 3px 3px 0px 0px;" alt="...">
+                            {% else %}
+                                <img src="https://images.pexels.com/photos/1051321/pexels-photo-1051321.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" class="card-img-top" style="border-radius: 3px 3px 0px 0px;" alt="...">
+                            {% endif %}
                         </a>
                         <div class="card-body">
                             <h5 class="card-title">{{ neighbourhood.title }}</h5>
@@ -46,7 +50,13 @@
                                 <br>
                             </div>
                             <br>
-                            <button class="btn btn-primary btn-block">Become A Member</button>
+                            {% if is_member %}
+                                <button class="btn btn-primary btn-block">Leave NeighbourHood</button>
+                            {% else %}
+                                <a href="{% url 'JoinNeighbourhood' neighbourhood.title %} ">
+                                    <button class="btn btn-primary btn-block">Become A Member</button>
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

@@ -72,6 +72,9 @@ class NeighbourHood(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Date Created')
     date_updated = models.DateTimeField(auto_now=True, verbose_name='Date Updated')
 
+    def get_members(self): # people who are members of the neighbourhood
+        return self.neighbourhood_membership.all()
+
     def __str__(self):
         return str(self.title)
     
@@ -126,7 +129,7 @@ class Post(models.Model):
 
 class Membership(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='User')
-    neighbourhood_membership = models.ForeignKey(NeighbourHood, on_delete=models.CASCADE, verbose_name='NeighbourHood')
+    neighbourhood_membership = models.ForeignKey(NeighbourHood, related_name='neighbourhood_member', on_delete=models.CASCADE, verbose_name='NeighbourHood')
 
     def __str__(self):
         return str(self.user.username + '-' + self.neighbourhood_membership.title)

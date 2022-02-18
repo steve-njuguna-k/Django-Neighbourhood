@@ -73,16 +73,17 @@ class UpdateUserForm(forms.ModelForm):
     last_name = forms.CharField(max_length=50, required=True, widget=forms.TextInput(attrs={'class': 'form-control mb-4'}))
     username = forms.CharField(max_length=50, required=True, widget=forms.TextInput(attrs={'class': 'form-control mb-4'}))
     email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'class': 'form-control mb-4', 'readonly':'readonly'}))
+    neighbourhood = forms.ChoiceField(required=False, widget=forms.Select(attrs={'class': 'form-control mb-4', 'placeholder':'Select Neighbourhood'}), choices=NeighbourHoods)
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email']
+        fields = ['first_name', 'last_name', 'username', 'email', 'neighbourhood']
 
 class UpdateProfileForm(forms.ModelForm):
     profile_picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'dropify', 'data-height':420, 'data-max-file-size':"1M"}))
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control mb-4', 'rows': 5, 'placeholder':'Keep it short, preferably in one concise sentence'}))
     national_id = forms.CharField(max_length=50, required=True, widget=forms.TextInput(attrs={'class': 'form-control mb-4', 'placeholder':'National ID'}))
-    neighbourhood = forms.ChoiceField(required=False, widget=forms.Select(attrs={'class': 'form-control mb-4', 'placeholder':'Select Neighbourhood'}))
+    neighbourhood = forms.ChoiceField(required=False, widget=forms.Select(attrs={'class': 'form-control mb-4', 'placeholder':'Select Neighbourhood'}), choices=NeighbourHoods)
 
     class Meta:
         model = Profile
