@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+import Neighbourhood
+
 COUNTIES = [
     ('', ('Choose')), 
     ('Baringo', ('Baringo')),
@@ -76,12 +78,13 @@ class NeighbourHood(models.Model):
         return str(self.title)
 
     def is_member(self, current_user):
-        user = User.objects.get(username=current_user)
+        user = User.objects.get(username=current_user.username)
         profile = Profile.objects.get(user=user)
+        print(profile)
         if profile.neighbourHood == self:
             return True
         else:
-            False
+            return False
     
     class Meta:
         verbose_name_plural = 'NeighbourHoods'

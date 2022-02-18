@@ -176,13 +176,6 @@ MESSAGE_TAGS = {
 # EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
 # EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 # EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-EMAIL_FROM_USER = 'pervez.nagi@student.moringaschool.com'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'pervez.nagi@student.moringaschool.com'
-EMAIL_HOST_PASSWORD = 'I$m@ilPerve3'
 
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

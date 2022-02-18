@@ -1,3 +1,4 @@
+from audioop import reverse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -118,15 +119,8 @@ def Logout(request):
     return redirect('Home')
 
 def Home(request):
-    current_profile = request.user.profile
     neighbourhoods = NeighbourHood.objects.all()
-    member = Membership.objects.filter(user = current_profile)
-    is_member = False
-    if member:
-        is_member = True
-    else:
-        is_member = False
-    return render(request, 'Index.html', {'neighbourhoods':neighbourhoods, 'is_member':is_member})
+    return render(request, 'Index.html', {'neighbourhoods':neighbourhoods})
 
 @login_required(login_url='Login')
 def Settings(request, username):
@@ -299,22 +293,16 @@ def AddPost(request, username):
 
 @login_required(login_url='Login')
 def JoinNeighbourhood(request, title):
-    neighbourhoodTobejoined = NeighbourHood.objects.get(title = title)
-    currentUserProfile = request.user.profile
-
-    if not neighbourhoodTobejoined:
-        messages.error(request, "⚠️ NeighbourHood Does Not Exist!")
+    neighbourhood = get_object_or_404(NeighbourHood, title=title)
+    if not request.user:
+        messages.info(request, "⚠️  You need to log in!")
         return redirect('Home')
-    else:
-        joined = Membership.objects.filter(user = currentUserProfile, neighbourhood_membership = neighbourhoodTobejoined)
-        if joined:
-            messages.error(request, '⚠️ You Can Only Join A NeighbourHood Once!')
-            return redirect('Home')
-        else:
-            neighbourhoodToadd = Membership(user = currentUserProfile, neighbourhood_membership = neighbourhoodTobejoined)
-            neighbourhoodToadd.save()
-            messages.success(request, "✅ You Are Now A Member Of This NeighbourHood!")
-            return redirect('SingleNeighbourhood', title = title)
+
+    profile = request.user.profile
+    profile.neighbourHood = neighbourhood
+    profile.save()
+    messages.success(request, "✅ You Have Joined this neighbourhood")
+    return redirect('Home')
 
 @login_required(login_url='Login')
 def LeaveNeighbourhood(request, title):
@@ -328,7 +316,12 @@ def LeaveNeighbourhood(request, title):
         membership = Membership.objects.filter(user = currentUserProfile, neighbourhood_membership = neighbourhoodToLeave)
         if membership:
             membership.delete()
+            currentUserProfile.neighbourHood = None
+            currentUserProfile.save()
             messages.success(request, "✅ You Have Left This NeighbourHood!")
+            return redirect('SingleNeighbourhood', title = title)
+        else:
+            messages.info(request, "⚠️ Membership Does Not Exist!")
             return redirect('SingleNeighbourhood', title = title)
 
 @login_required(login_url='Login')
@@ -337,10 +330,5 @@ def SingleNeighbourhood(request, title):
     neighbourhood = get_object_or_404(NeighbourHood, title=title)
     businesses = Business.objects.filter(neighbourhood = neighbourhood.id).all()
     posts = Post.objects.filter(neighbourhood = neighbourhood.id).all()
-    member = Membership.objects.filter(user = current_profile)
-    is_member = False
-    if member:
-        is_member = True
-    else:
-        is_member = False
-    return render(request, 'Neighbourhood.html', {'neighbourhood': neighbourhood, 'businesses':businesses, 'posts':posts, 'is_member':is_member})
+    
+    return render(request, 'Neighbourhood.html', {'neighbourhood': neighbourhood, 'businesses':businesses, 'posts':posts})
