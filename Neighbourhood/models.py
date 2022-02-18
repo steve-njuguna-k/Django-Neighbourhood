@@ -72,11 +72,16 @@ class NeighbourHood(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Date Created')
     date_updated = models.DateTimeField(auto_now=True, verbose_name='Date Updated')
 
-    def get_members(self): # people who are members of the neighbourhood
-        return self.neighbourhood_membership.all()
-
     def __str__(self):
         return str(self.title)
+
+    def is_member(self, current_user):
+        user = User.objects.get(username=current_user)
+        profile = Profile.objects.get(user=user)
+        if profile.neighbourHood == self:
+            return True
+        else:
+            False
     
     class Meta:
         verbose_name_plural = 'NeighbourHoods'

@@ -233,18 +233,21 @@ def AddNeighbourhood(request, username):
         form = AddNeighbourhoodForm()
     return render(request, 'AddNeighbourhood.html', {'form':form, 'profile_details':profile_details})
 
+@login_required(login_url='Login')
 def MyNeighbourhoods(request, username):
     profile = User.objects.get(username=username)
     profile_details = Profile.objects.get(user = profile.id)
     neighbourhoods = NeighbourHood.objects.filter(neighbourhood_admin = profile.id).all()
     return render(request, 'My Neighbourhoods.html', {'neighbourhoods':neighbourhoods, 'profile_details':profile_details})
 
+@login_required(login_url='Login')
 def MyBusinesses(request, username):
     profile = User.objects.get(username=username)
     profile_details = Profile.objects.get(user = profile.id)
     businesses = Business.objects.filter(owner = profile.id).all()
     return render(request, 'My Businesses.html', {'businesses':businesses, 'profile_details':profile_details})
 
+@login_required(login_url='Login')
 def MyPosts(request, username):
     profile = User.objects.get(username=username)
     profile_details = Profile.objects.get(user = profile.id)
@@ -263,6 +266,8 @@ def Search(request):
 @login_required(login_url='Login')
 def AddPost(request, username):
     profile = User.objects.get(username=username)
+    member = Membership.objects.filter(user = profile)
+
     if request.method == "POST":
         form = AddPostForm(request.POST)
         if form.is_valid():
@@ -270,13 +275,21 @@ def AddPost(request, username):
             description = form.cleaned_data['description']
             neighbourhood = form.cleaned_data['neighbourhood']
             category = form.cleaned_data['category']
-            
-            neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
-            new_post = Post(title = title, category = category, neighbourhood = neighbourhood_obj, description = description, author = request.user.profile)
-            new_post.save()
 
-            messages.success(request, '✅ Your Post Was Created Successfully!')
-            return redirect('MyPosts', username=username)
+            neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
+            neighbourhood_id = Membership.objects.filter(neighbourhood_membership = neighbourhood_obj.id)
+
+            if member != neighbourhood_id:
+                messages.error(request, "⚠️ You Need To Be A Member of The Selected Neighbourhoof First!")
+                return redirect('AddPost', username=username)
+
+            else:
+                neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
+                new_post = Post(title = title, category = category, neighbourhood = neighbourhood_obj, description = description, author = request.user.profile)
+                new_post.save()
+
+                messages.success(request, '✅ Your Post Was Created Successfully!')
+                return redirect('MyPosts', username=username)
         else:
             messages.error(request, "⚠️ Your Post Wasn't Created!")
             return redirect('AddPost', username=username)
@@ -288,7 +301,6 @@ def AddPost(request, username):
 def JoinNeighbourhood(request, title):
     neighbourhoodTobejoined = NeighbourHood.objects.get(title = title)
     currentUserProfile = request.user.profile
-    is_followed = False
 
     if not neighbourhoodTobejoined:
         messages.error(request, "⚠️ NeighbourHood Does Not Exist!")
@@ -302,8 +314,24 @@ def JoinNeighbourhood(request, title):
             neighbourhoodToadd = Membership(user = currentUserProfile, neighbourhood_membership = neighbourhoodTobejoined)
             neighbourhoodToadd.save()
             messages.success(request, "✅ You Are Now A Member Of This NeighbourHood!")
-            return redirect('Home')
+            return redirect('SingleNeighbourhood', title = title)
 
+@login_required(login_url='Login')
+def LeaveNeighbourhood(request, title):
+    neighbourhoodToLeave = NeighbourHood.objects.get(title = title)
+    currentUserProfile = request.user.profile
+
+    if not neighbourhoodToLeave:
+        messages.error(request, "⚠️ NeighbourHood Does Not Exist!")
+        return redirect('Home')
+    else:
+        membership = Membership.objects.filter(user = currentUserProfile, neighbourhood_membership = neighbourhoodToLeave)
+        if membership:
+            membership.delete()
+            messages.success(request, "✅ You Have Left This NeighbourHood!")
+            return redirect('SingleNeighbourhood', title = title)
+
+@login_required(login_url='Login')
 def SingleNeighbourhood(request, title):
     current_profile = request.user.profile
     neighbourhood = get_object_or_404(NeighbourHood, title=title)
