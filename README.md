@@ -1,7 +1,9 @@
-# Django-Neighbourhood
+# Django Neighbourhood
 A Django web application that allows registered users to know about everything happening in their current neighborhoods. Registered user must be a member to a given neighbourhood to post or see news related.
 
-![](https://github.com/steve-njuguna-k/Django-Neighbourhood/blob/master/Screenshot.PNG)
+![](https://github.com/steve-njuguna-k/Django-Neighbourhood/blob/master/Screenshots/Screenshot-1.PNG)
+
+![](https://github.com/steve-njuguna-k/Django-Neighbourhood/blob/master/Screenshots/Screenshot-2.PNG)
 
 ## Presented By
 - [Pervez Nagi](https://github.com/ismailPervez)
