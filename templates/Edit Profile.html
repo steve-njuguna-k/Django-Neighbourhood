@@ -83,8 +83,13 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="profession">Neighbourhood</label>
-                                            {{ profile_form.neighbourhood }}
+                                            <label for="profession">Neighbourhood <span class="text-danger">*</span></label>
+                                            <select name="neighbourhood" class="form-control mb-4" placeholder="Select Neighbourhood">
+                                                <option value="" selected disabled>Select Neighbourhood</option>
+                                                {% for id, title in profile_form.fields.neighbourhood.choices %}
+                                                <option value="{{ id }}">{{ title }}</option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
                                     </div>
                                 </div>

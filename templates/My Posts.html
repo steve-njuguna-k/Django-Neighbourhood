@@ -33,7 +33,16 @@
                     <div class="card" style="margin-bottom: 30px;">
                         <div class="card-body">
                             <h5 class="card-title">{{ post.title }}</h5>
-                            <p class="text-muted" style="font-size: small;">Neighbourhood: <span class="text-dark"><b>{{ post.neighbourhood.title }}</b></span> </p>
+                            <p class="text-muted" style="font-size: small;">
+                                Neighbourhood: 
+                                <span class="text-dark">
+                                    <b>
+                                        <a href="{% url 'SingleNeighbourhood' neighbourhood.title %}" name="SingleNeighbourhood">
+                                            {{ post.neighbourhood.title }}   
+                                        </a>
+                                    </b>
+                                </span>
+                            </p>
                             <p class="card-text">{{ post.description|truncatewords:45 }}</p>
                             <hr>
                             <div class="d-flex flex-row user-info">

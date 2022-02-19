@@ -40,7 +40,9 @@
                             </div>
                             <br>
                             <div class="" style="float:right">
-                                <h6><span class="badge badge-primary">{{ business.neighbourhood }}</span></h6>
+                                <a href="{% url 'SingleNeighbourhood' neighbourhood.title %}" name="SingleNeighbourhood">
+                                    <h6><span class="badge badge-primary">{{ business.neighbourhood }}</span></h6>
+                                </a>
                             </div>
                             <br>
                             <hr>
