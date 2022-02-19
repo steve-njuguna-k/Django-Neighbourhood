@@ -90,7 +90,7 @@ def ActivateAccount(request, uidb64, token):
     else:
         messages.error(request, ('⚠️ The confirmation link was invalid, possibly because it has already been used.'))
         return redirect('Login')
-
+    
 def Login(request):
     if request.method == 'POST':
         username = request.POST['username']
