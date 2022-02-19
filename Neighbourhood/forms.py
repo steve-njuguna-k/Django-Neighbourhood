@@ -65,13 +65,6 @@ CATEGORIES = [
     ('7', 'Event'),
 ]
 
-class CustomSelectWidget(forms.Select):
-    def create_option(self, name, value, *args, **kwargs):
-        option = super().create_option(name, value, *args, **kwargs)
-        if value:
-            instance = self.choices.queryset.get(pk=value)  # get instance
-            option['attrs']['custom_attr'] = instance.field_name  # set option attribute
-
 class UpdateUserForm(forms.ModelForm):
     first_name = forms.CharField(max_length=50, required=True, widget=forms.TextInput(attrs={'class': 'form-control mb-4'}))
     last_name = forms.CharField(max_length=50, required=True, widget=forms.TextInput(attrs={'class': 'form-control mb-4'}))
@@ -125,14 +118,17 @@ class AddBussinessForm(forms.Form):
         self.fields['neighbourhood'].choices = [(e.id, e.title) for e in NeighbourHood.objects.all()]
 
 class AddNeighbourhoodForm(forms.ModelForm):
-    title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Title','class': 'form-control mb-4'}))
-    location = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Location','class': 'form-control mb-4'}))
-    county = forms.ChoiceField(widget=forms.Select( attrs={'class': 'form-control mb-4'}), choices=COUNTIES)
-    neighbourhood_logo = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'dropify', 'data-height':300, 'data-max-file-size':"1M"}))
+    title = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Title','class': 'form-control mb-4'}))
+    description = forms.CharField(required=True, widget=forms.Textarea(attrs={'placeholder': 'Description','class': 'form-control mb-4','rows': 3,}))
+    location = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Location','class': 'form-control mb-4'}))
+    county = forms.ChoiceField(required=True, widget=forms.Select( attrs={'class': 'form-control mb-4'}), choices=COUNTIES)
+    neighbourhood_logo = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class': 'dropify', 'data-height':300, 'data-max-file-size':"1M"}))
+    health_department = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Health Department','class': 'form-control mb-4'}))
+    police_department = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Police Department','class': 'form-control mb-4'}))
 
     class Meta:
         model = NeighbourHood
-        fields = ('title','location','county','neighbourhood_logo')
+        fields = ('title','description','location','county','neighbourhood_logo','health_department','police_department')
 
 class AddPostForm(forms.Form):
     title = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control mb-4', 'placeholder':'Post Title'}))

@@ -25,6 +25,33 @@
         {% else %}
         <p class="text-center text-muted"> ( {{ members|length }} Members ) </p>
         {% endif %}
+        <p class="card-text text-center">{{ neighbourhood.description }}</p>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center"><b>County</b></h5>
+                        <p class="card-text text-center"><i class="fa-solid fa-location-pin"></i> {{ neighbourhood.county }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center"><b>Health Hotline</b></h5>
+                        <p class="card-text text-center"><i class="fa-solid fa-phone"></i> {{ neighbourhood.health_department }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center"><b>Police Hotline</b></h5>
+                        <p class="card-text text-center"><i class="fa-solid fa-phone"></i> {{ neighbourhood.police_department }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         {% if user.is_authenticated %}
 
@@ -137,7 +164,7 @@
                         <br>
                         <h4 class="text-dark py-3">You Need To Be A Member To View Businesses & Posts From {{ neighbourhood.title }}</h4>
                         <a href="{% url 'JoinNeighbourhood' neighbourhood.title %}" name="JoinNeighbourhood">
-                            <button type="submit" class="btn btn-primary btn-md" style="margin-right: 20px;"><i class="fa-solid fa-plus"></i> Become A Member</button>
+                            <button type="submit" class="btn btn-primary btn-md" style="margin-right: 20px;">Become A Member</button>
                         </a>
                         <br>
                     </div> 

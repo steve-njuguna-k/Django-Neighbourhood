@@ -239,6 +239,9 @@ def MyNeighbourhoods(request, username):
     profile = User.objects.get(username=username)
     profile_details = Profile.objects.get(user = profile.id)
     neighbourhoods = NeighbourHood.objects.filter(neighbourhood_admin = profile.id).all()
+    for neighbourhood in neighbourhoods:
+        print(neighbourhood.title)
+        print(neighbourhood.description)
     return render(request, 'My Neighbourhoods.html', {'neighbourhoods':neighbourhoods, 'profile_details':profile_details})
 
 @login_required(login_url='Login')

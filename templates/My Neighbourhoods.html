@@ -40,8 +40,17 @@
                         </a>
                         <div class="card-body">
                             <h5 class="card-title">{{ neighbourhood.title }}</h5>
-                            <div class="badge" style="float:left">
+                            <P class="card-text">{{ neighbourhood.description|truncatewords:10 }}</h5>
+                            <div class="badge">
                                 <h6><span  style="font-weight: lighter; font-size: small;">Location: <b>{{ neighbourhood.location }}</b></span></h6>
+                            </div>
+                            <br>
+                            <div class="badge">
+                                <h6><span  style="font-weight: lighter; font-size: small;">Health Department: <b>{{ neighbourhood.health_department }}</b></span></h6>
+                            </div>
+                            <br>
+                            <div class="badge">
+                                <h6><span  style="font-weight: lighter; font-size: small;">Police Department: <b>{{ neighbourhood.police_department }}</b></span></h6>
                             </div>
                             <div class="badge" style="float:right">
                                 <h6><span class="badge badge-primary">{{ neighbourhood.county }}</span></h6>
