@@ -63,9 +63,6 @@ py manage.py runserver
 ## Known Bugs
 - There are no known bugs currently but pull requests are allowed incase you spot a bug
 
-## Contact Information
-If you have any question or contributions, please find me on [LinkedIn](https://www.linkedin.com/in/steve-njuguna-aa426096/)
-
 © 2022 Steve Njuguna & Pervez Nagi
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
