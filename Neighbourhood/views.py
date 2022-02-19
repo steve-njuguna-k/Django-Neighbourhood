@@ -9,7 +9,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.contrib.auth import update_session_auth_hash
 from Neighbourhood.models import Business, Membership, NeighbourHood, Post, Profile
-from .forms import AddBussinessForm, AddNeighbourhoodForm, AddPostForm, PasswordChangeForm, UpdateProfileForm, UpdateUserForm
+from .forms import PasswordChangeForm
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from Core import settings
@@ -139,39 +139,39 @@ def Settings(request, username):
         form = PasswordChangeForm(data=request.POST, user=request.user)
         return render(request, "Settings.html", {'form': form, 'profile_details':profile_details})
 
-@login_required(login_url='Login')
-def EditProfile(request, username):
-    user = User.objects.get(username=username)
-    profile_details = Profile.objects.get(user = user.id)
-    if request.method == 'POST':
-        user_form = UpdateUserForm(request.POST, instance=request.user)
-        profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+# @login_required(login_url='Login')
+# def EditProfile(request, username):
+#     user = User.objects.get(username=username)
+#     profile_details = Profile.objects.get(user = user.id)
+#     if request.method == 'POST':
+#         user_form = UpdateUserForm(request.POST, instance=request.user)
+#         profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
 
-        if user_form.is_valid() and profile_form.is_valid():
-            neighbourhood = profile_form.cleaned_data['neighbourhood']
-            bio = profile_form.cleaned_data['bio']
-            national_id = profile_form.cleaned_data['national_id']
-            first_name = user_form.cleaned_data['first_name']
-            last_name = user_form.cleaned_data['last_name']
-            username = user_form.cleaned_data['username']
-            user.username = username
-            user.first_name = first_name
-            user.last_name = last_name
-            profile_details.national_id = national_id
-            profile_details.bio = bio
-            profile_details.neighbourHood = NeighbourHood.objects.get(pk=int(neighbourhood))
-            user.save()
-            profile_details.save()
-            messages.success(request, '✅ Your Profile Has Been Updated Successfully!')
-            return redirect('EditProfile', username=username)
-        else:
-            messages.error(request, "⚠️ Your Profile Wasn't Updated!")
-            return redirect('EditProfile', username=username)
-    else:
-        user_form = UpdateUserForm(instance=request.user)
-        profile_form = UpdateProfileForm(instance=request.user.profile)
+#         if user_form.is_valid() and profile_form.is_valid():
+#             neighbourhood = profile_form.cleaned_data['neighbourhood']
+#             bio = profile_form.cleaned_data['bio']
+#             national_id = profile_form.cleaned_data['national_id']
+#             first_name = user_form.cleaned_data['first_name']
+#             last_name = user_form.cleaned_data['last_name']
+#             username = user_form.cleaned_data['username']
+#             user.username = username
+#             user.first_name = first_name
+#             user.last_name = last_name
+#             profile_details.national_id = national_id
+#             profile_details.bio = bio
+#             profile_details.neighbourHood = NeighbourHood.objects.get(pk=int(neighbourhood))
+#             user.save()
+#             profile_details.save()
+#             messages.success(request, '✅ Your Profile Has Been Updated Successfully!')
+#             return redirect('EditProfile', username=username)
+#         else:
+#             messages.error(request, "⚠️ Your Profile Wasn't Updated!")
+#             return redirect('EditProfile', username=username)
+#     else:
+#         user_form = UpdateUserForm(instance=request.user)
+#         profile_form = UpdateProfileForm(instance=request.user.profile)
 
-    return render(request, 'Edit Profile.html', {'user_form': user_form, 'profile_form': profile_form, 'profile_details':profile_details})
+#     return render(request, 'Edit Profile.html', {'user_form': user_form, 'profile_form': profile_form, 'profile_details':profile_details})
 
 @login_required(login_url='Login')
 def MyProfile(request, username):
@@ -179,58 +179,58 @@ def MyProfile(request, username):
     profile_details = Profile.objects.get(user = profile.id)
     return render(request, 'My Profile.html', {'profile':profile, 'profile_details':profile_details})
 
-@login_required(login_url='Login')
-def AddBusiness(request, username):
-    profile = User.objects.get(username=username)
-    profile_details = Profile.objects.get(user = profile.id)
-    form = AddBussinessForm()
-    if request.method == "POST":
-        form = AddBussinessForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            neighbourhood = form.cleaned_data['neighbourhood']
-            description = form.cleaned_data['description']
+# @login_required(login_url='Login')
+# def AddBusiness(request, username):
+#     profile = User.objects.get(username=username)
+#     profile_details = Profile.objects.get(user = profile.id)
+#     form = AddBussinessForm()
+#     if request.method == "POST":
+#         form = AddBussinessForm(request.POST)
+#         if form.is_valid():
+#             name = form.cleaned_data['name']
+#             email = form.cleaned_data['email']
+#             neighbourhood = form.cleaned_data['neighbourhood']
+#             description = form.cleaned_data['description']
 
-            neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
-            member = Membership.objects.filter(user = profile.id, neighbourhood_membership = neighbourhood_obj.id)
+#             neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
+#             member = Membership.objects.filter(user = profile.id, neighbourhood_membership = neighbourhood_obj.id)
 
-            if not member:
-                messages.error(request, "⚠️ You Need To Be A Member of The Selected Neighbourhood First!")
-                return redirect('AddBusiness', username=username)
+#             if not member:
+#                 messages.error(request, "⚠️ You Need To Be A Member of The Selected Neighbourhood First!")
+#                 return redirect('AddBusiness', username=username)
 
-            else:
-                neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
-                new_business = Business(name = name, email = email, neighbourhood = neighbourhood_obj, description = description, owner = request.user.profile)
-                new_business.save()
+#             else:
+#                 neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
+#                 new_business = Business(name = name, email = email, neighbourhood = neighbourhood_obj, description = description, owner = request.user.profile)
+#                 new_business.save()
 
-                messages.success(request, '✅ A Business Was Created Successfully!')
-                return redirect('MyBusinesses', username=username)
-        else:
-            messages.error(request, "⚠️ A Business Wasn't Created!")
-            return redirect('AddBusiness')
-    else:
-        form = AddBussinessForm()
-    return render(request, 'AddBusiness.html', {'form':form})
+#                 messages.success(request, '✅ A Business Was Created Successfully!')
+#                 return redirect('MyBusinesses', username=username)
+#         else:
+#             messages.error(request, "⚠️ A Business Wasn't Created!")
+#             return redirect('AddBusiness')
+#     else:
+#         form = AddBussinessForm()
+#     return render(request, 'AddBusiness.html', {'form':form})
 
-@login_required(login_url='Login')
-def AddNeighbourhood(request, username):
-    profile = User.objects.get(username=username)
-    profile_details = Profile.objects.get(user = profile.id)
-    if request.method == 'POST':
-        form = AddNeighbourhoodForm(request.POST, request.FILES)
-        if form.is_valid():
-            neighbourhood = form.save(commit=False)
-            neighbourhood.neighbourhood_admin = request.user
-            neighbourhood.save()
-            messages.success(request, '✅ A Neighbourhood Was Created Successfully!')
-            return redirect('MyNeighbourhoods', username=username)
-        else:
-            messages.error(request, "⚠️ A Neighbourhood Wasn't Created!")
-            return redirect('AddNeighbourhood')
-    else:
-        form = AddNeighbourhoodForm()
-    return render(request, 'AddNeighbourhood.html', {'form':form, 'profile_details':profile_details})
+# @login_required(login_url='Login')
+# def AddNeighbourhood(request, username):
+#     profile = User.objects.get(username=username)
+#     profile_details = Profile.objects.get(user = profile.id)
+#     if request.method == 'POST':
+#         form = AddNeighbourhoodForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             neighbourhood = form.save(commit=False)
+#             neighbourhood.neighbourhood_admin = request.user
+#             neighbourhood.save()
+#             messages.success(request, '✅ A Neighbourhood Was Created Successfully!')
+#             return redirect('MyNeighbourhoods', username=username)
+#         else:
+#             messages.error(request, "⚠️ A Neighbourhood Wasn't Created!")
+#             return redirect('AddNeighbourhood')
+#     else:
+#         form = AddNeighbourhoodForm()
+#     return render(request, 'AddNeighbourhood.html', {'form':form, 'profile_details':profile_details})
 
 @login_required(login_url='Login')
 def MyNeighbourhoods(request, username):
@@ -262,39 +262,39 @@ def Search(request):
     else:
         return render(request, 'Search Results.html')
 
-@login_required(login_url='Login')
-def AddPost(request, username):
-    user = User.objects.get(username=username)
-    profile = Profile.objects.get(user=user.id)
+# @login_required(login_url='Login')
+# def AddPost(request, username):
+#     user = User.objects.get(username=username)
+#     profile = Profile.objects.get(user=user.id)
 
-    if request.method == "POST":
-        form = AddPostForm(request.POST)
-        if form.is_valid():
-            title = form.cleaned_data['title']
-            description = form.cleaned_data['description']
-            neighbourhood = form.cleaned_data['neighbourhood']
-            category = form.cleaned_data['category']
+#     if request.method == "POST":
+#         form = AddPostForm(request.POST)
+#         if form.is_valid():
+#             title = form.cleaned_data['title']
+#             description = form.cleaned_data['description']
+#             neighbourhood = form.cleaned_data['neighbourhood']
+#             category = form.cleaned_data['category']
 
-            neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
-            member = Membership.objects.filter(user = profile.id, neighbourhood_membership = neighbourhood_obj.id)
+#             neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
+#             member = Membership.objects.filter(user = profile.id, neighbourhood_membership = neighbourhood_obj.id)
 
-            if not member:
-                messages.error(request, "⚠️ You Need To Be A Member of The Selected Neighbourhood First!")
-                return redirect('AddPost', username=username)
+#             if not member:
+#                 messages.error(request, "⚠️ You Need To Be A Member of The Selected Neighbourhood First!")
+#                 return redirect('AddPost', username=username)
 
-            else:
-                neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
-                new_post = Post(title = title, category = category, neighbourhood = neighbourhood_obj, description = description, author = request.user.profile)
-                new_post.save()
+#             else:
+#                 neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
+#                 new_post = Post(title = title, category = category, neighbourhood = neighbourhood_obj, description = description, author = request.user.profile)
+#                 new_post.save()
 
-                messages.success(request, '✅ Your Post Was Created Successfully!')
-                return redirect('MyPosts', username=username)
-        else:
-            messages.error(request, "⚠️ Your Post Wasn't Created!")
-            return redirect('AddPost', username=username)
-    else:
-        form = AddPostForm()
-    return render(request, 'AddPost.html', {'form':form})
+#                 messages.success(request, '✅ Your Post Was Created Successfully!')
+#                 return redirect('MyPosts', username=username)
+#         else:
+#             messages.error(request, "⚠️ Your Post Wasn't Created!")
+#             return redirect('AddPost', username=username)
+#     else:
+#         form = AddPostForm()
+#     return render(request, 'AddPost.html', {'form':form})
 
 @login_required(login_url='Login')
 def JoinNeighbourhood(request, title):
