@@ -17,6 +17,8 @@ The user can perform the following functions:
 - A user can find a list of different businesses in my neighborhood.
 - A user can create posts that will be visible to everyone in my neighborhood.
 - A user can change their neighborhood when I decide to move out.
+- A user can find contact information for the health department and Police authorities near my neighborhood.
+- A user can only view details of a single neighborhood.
 
 ## Installation / Setup instruction
 The application requires the following installations to operate:
