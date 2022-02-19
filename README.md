@@ -1,4 +1,4 @@
-# Django Neighbourhood
+# Django NeighbourHood (Nyumba Kumi)
 A Django web application that allows registered users to know about everything happening in their current neighborhoods. Registered user must be a member to a given neighbourhood to post or see news related.
 
 ![](https://github.com/steve-njuguna-k/Django-Neighbourhood/blob/master/Screenshots/Screenshot-1.PNG)
