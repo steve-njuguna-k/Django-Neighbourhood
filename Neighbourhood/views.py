@@ -162,10 +162,18 @@ def EditProfile(request, username):
             profile_details.bio = bio
             profile_details.profile_picture = profile_picture
             profile_details.neighbourHood = NeighbourHood.objects.get(pk=int(neighbourhood))
-            user.save()
-            profile_details.save()
-            messages.success(request, '✅ Your Profile Has Been Updated Successfully!')
-            return redirect('EditProfile', username=username)
+
+            neighbourhood_obj = NeighbourHood.objects.get(pk=int(neighbourhood))
+            member = Membership.objects.filter(user = profile_details.id, neighbourhood_membership = neighbourhood_obj.id)
+
+            if not member:
+                messages.error(request, "⚠️ You Need To Be A Member of The Selected Neighbourhood First!")
+                return redirect('EditProfile', username=username)
+            else:   
+                user.save()
+                profile_details.save()
+                messages.success(request, '✅ Your Profile Has Been Updated Successfully!')
+                return redirect('EditProfile', username=username)
         else:
             messages.error(request, "⚠️ Your Profile Wasn't Updated!")
             return redirect('EditProfile', username=username)
