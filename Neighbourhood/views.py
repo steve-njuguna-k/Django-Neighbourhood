@@ -148,6 +148,7 @@ def EditProfile(request, username):
         profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
 
         if user_form.is_valid() and profile_form.is_valid():
+            profile_picture = profile_form.cleaned_data['profile_picture']
             neighbourhood = profile_form.cleaned_data['neighbourhood']
             bio = profile_form.cleaned_data['bio']
             national_id = profile_form.cleaned_data['national_id']
@@ -159,6 +160,7 @@ def EditProfile(request, username):
             user.last_name = last_name
             profile_details.national_id = national_id
             profile_details.bio = bio
+            profile_details.profile_picture = profile_picture
             profile_details.neighbourHood = NeighbourHood.objects.get(pk=int(neighbourhood))
             user.save()
             profile_details.save()
