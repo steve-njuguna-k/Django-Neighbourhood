@@ -285,8 +285,8 @@ h1, h2, h3, h4, h5, h6, p{
 	text-align: center;
 }
 
-.btn{
-    border-radius: 10px;
+.btn {
+    border-radius: 3px;
 }
 
 .btn-primary{
@@ -299,6 +299,12 @@ h1, h2, h3, h4, h5, h6, p{
     background-color: #73db73;
     border-color: #73db73;
     color: #ffffff;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #006837;
+    border-color: #006837;
 }
 
 .fa{
