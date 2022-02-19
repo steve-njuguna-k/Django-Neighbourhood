@@ -310,10 +310,14 @@ def JoinNeighbourhood(request, title):
         messages.error(request, "⚠️ NeighbourHood Does Not Exist!")
         return redirect('Home')
     else:
+        member_elsewhere = Membership.objects.filter(user = currentUserProfile)
         joined = Membership.objects.filter(user = currentUserProfile, neighbourhood_membership = neighbourhoodTobejoined)
         if joined:
             messages.error(request, '⚠️ You Can Only Join A NeighbourHood Once!')
-            return redirect('Home')
+            return redirect('SingleNeighbourhood', title = title)
+        elif member_elsewhere:
+            messages.error(request, '⚠️ You Are Already A Member In Another Neighbourhood! Leave To Join This One')
+            return redirect('SingleNeighbourhood', title = title)
         else:
             neighbourhoodToadd = Membership(user = currentUserProfile, neighbourhood_membership = neighbourhoodTobejoined)
             neighbourhoodToadd.save()

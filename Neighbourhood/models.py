@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-# from cloudinary.models import CloudinaryField
+from cloudinary.models import CloudinaryField
 
 COUNTIES = [
     ('', ('Choose')), 
@@ -69,8 +69,8 @@ class NeighbourHood(models.Model):
     description = models.TextField(max_length=254, blank=True, verbose_name='Description')
     location = models.CharField(max_length=150, verbose_name='Neighbourhood Location', null=True, blank=True)
     county = models.CharField(choices=COUNTIES, max_length=150, verbose_name='Neighbourhood County', null=True, blank=True)
-    #neighbourhood_logo = CloudinaryField('neighbourhood_logo')
-    neighbourhood_logo = models.ImageField(upload_to='Neighbourhood-Logo', verbose_name='Neighbourhood-Logo')
+    neighbourhood_logo = CloudinaryField('neighbourhood_logo')
+    # neighbourhood_logo = models.ImageField(upload_to='Neighbourhood-Logo', verbose_name='Neighbourhood-Logo')
     neighbourhood_admin = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Neighbourhood Admin')
     health_department = models.CharField(max_length=15, null=True, blank=True, verbose_name='Health Department')
     police_department = models.CharField(max_length=15, null=True, blank=True, verbose_name='Police Department')
@@ -105,8 +105,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='User')
     bio = models.TextField(max_length=254, blank=True, verbose_name='Bio')
     national_id = models.CharField(max_length=10, blank=True, verbose_name='National ID')
-    #profile_picture = CloudinaryField('profile_picture')
-    profile_picture = models.ImageField(upload_to='Profile-Pics', verbose_name='Profile-Pics')
+    profile_picture = CloudinaryField('profile_picture')
+    # profile_picture = models.ImageField(upload_to='Profile-Pics', verbose_name='Profile-Pics')
     neighbourHood = models.ForeignKey(NeighbourHood, on_delete=models.CASCADE, null=True, blank=True, verbose_name='NeighbourHood')
     email_confirmed = models.BooleanField(default=False, verbose_name='Is Confirmed?')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Date Created')
