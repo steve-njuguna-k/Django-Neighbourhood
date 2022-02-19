@@ -33,7 +33,16 @@
                     <div class="card" style="margin-bottom: 30px;">
                         <div class="card-body">
                             <h5 class="card-title">{{ business.name }}</h5>
-                            <p class="text-muted" style="font-size: small;">Neighbourhood: <span class="text-dark"><b>{{ business.neighbourhood.title }}</b></span> </p>
+                            <p class="text-muted" style="font-size: small;">
+                                Neighbourhood: 
+                                <span class="text-dark">
+                                    <b>
+                                        <a href="/neighbourhood/{{ business.neighbourhood.title }}">
+                                            {{ business.neighbourhood.title }}   
+                                        </a>
+                                    </b>
+                                </span>
+                            </p>
                             <p class="card-text">{{ business.description|truncatewords:45 }}</p>
                             <div class="" style="float:left">
                                 <h6><span  style="font-weight: lighter; font-size: small;">Email Address: <b>{{ business.email }}</b></span></h6>
